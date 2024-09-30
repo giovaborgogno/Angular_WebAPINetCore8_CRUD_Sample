@@ -43,12 +43,12 @@ stages:
       displayName: 'Publicar resultados de code coverage del back-end'
     - task: SonarCloudPrepare@2
       inputs:
-        SonarCloud: 'SonarCloud'
+        SonarCloud: 'Employee-CRUD-backend'
         organization: 'giovaborgogno-azure-devops'
         scannerMode: 'MSBuild'
         projectKey: 'Employee-CRUD-backend'
         projectName: 'Employee-CRUD-backend'
-        sources: |
+        clisources: |
           $(Build.SourcesDirectory)/EmployeeCrudApi,
           $(Build.SourcesDirectory)/EmployeeCrudApi.Tests
     - task: CmdLine@2
@@ -82,12 +82,12 @@ stages:
       displayName: 'Install Node.js'
     - task: SonarCloudPrepare@2
       inputs:
-        SonarCloud: 'SonarCloud'
+        SonarCloud: 'Employee-CRUD-frontend'
         organization: 'giovaborgogno-azure-devops'
         scannerMode: 'MSBuild'
         projectKey: 'Employee-CRUD-frontend'
         projectName: 'Employee-CRUD-frontend'
-        sources: $(Build.SourcesDirectory)/EmployeeCrudAngular
+        clisources: $(Build.SourcesDirectory)/EmployeeCrudAngular
     - task: CmdLine@2
       displayName: 'npm install'
       inputs:
