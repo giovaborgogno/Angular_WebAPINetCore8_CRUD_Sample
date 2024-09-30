@@ -1,0 +1,113 @@
+trigger:
+  branches:
+    include:
+    - master
+pool:
+  vmImage: ubuntu-latest
+variables:
+- name: solution
+  value: EmployeeCrudApi/EmployeeCrudApi.sln
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: system.debug
+  value: false
+stages:
+- stage: Build
+  displayName: 'Test and Build Application'
+  jobs:
+  - job: BuildBackend
+    displayName: 'Test and Build Backend'
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: sdk
+        version: '8.x'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+    - task: CmdLine@2
+      displayName: 'Restore NuGet Packages'
+      inputs:
+        script: |
+          dotnet restore $(solution)
+    - task: DotNetCoreCLI@2
+      displayName: 'Ejecutar pruebas de la API'
+      inputs:
+        command: 'test'
+        projects: '**/*.Tests.csproj'
+        arguments: '--collect:"XPlat Code Coverage"'
+    - task: PublishCodeCoverageResults@2
+      inputs:
+        summaryFileLocation: '$(Agent.TempDirectory)/**/*.cobertura.xml'
+        failIfCoverageEmpty: false
+      displayName: 'Publicar resultados de code coverage del back-end'
+    - task: CmdLine@2
+      displayName: 'Build Project'
+      inputs:
+        script: |
+          dotnet build $(solution) --configuration $(buildConfiguration)
+    - task: CmdLine@2
+      displayName: 'Publish Project'
+      inputs:
+        script: |
+          dotnet publish $(solution) --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) --no-build
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'drop'
+        publishLocation: 'Container'
+      displayName: 'Publish Build Artifacts'
+  - job: BuildFrontend
+    displayName: 'Build and Test Frontend'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20.x'
+      displayName: 'Install Node.js'
+    - task: CmdLine@2
+      displayName: 'npm install'
+      inputs:
+        script: |
+          echo "Current directory: $(Build.SourcesDirectory)/EmployeeCrudAngular"
+          cd $(Build.SourcesDirectory)/EmployeeCrudAngular
+          ls -l
+          npm install -g @angular/cli
+          npm install
+    - task: Cache@2
+      inputs:
+        key: 'npm | "$(Agent.OS)" | $(Build.SourcesDirectory)/EmployeeCrudAngular/package-lock.json'
+        path: '$(Build.SourcesDirectory)/EmployeeCrudAngular/node_modules'
+        restoreKeys: |
+          npm | "$(Agent.OS)"
+      displayName: 'Cachear dependencias de npm'
+    - task: CmdLine@2
+      displayName: 'Ejecutar pruebas del front'
+      continueOnError: true
+      inputs:
+        script: npx ng test --karma-config=karma.conf.js --watch=false --browsers ChromeHeadless --code-coverage
+        workingDirectory: $(Build.SourcesDirectory)/EmployeeCrudAngular
+    - task: PublishCodeCoverageResults@2
+      inputs:
+        summaryFileLocation: '$(Build.SourcesDirectory)/EmployeeCrudAngular/coverage/lcov.info'
+        failIfCoverageEmpty: false
+      condition: always()
+      displayName: 'Publicar resultados de code coverage del front'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '$(Build.SourcesDirectory)/EmployeeCrudAngular/test-results/test-results.xml'
+        failTaskOnFailedTests: true
+      condition: always()
+      displayName: 'Publicar resultados de pruebas unitarias del front'
+    - task: CmdLine@2
+      displayName: 'npm build'
+      inputs:
+        script: |
+          cd $(Build.SourcesDirectory)/EmployeeCrudAngular
+          ng build --configuration production
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.SourcesDirectory)/EmployeeCrudAngular/dist'
+        artifactName: 'angular-drop'
+        publishLocation: 'Container'
+      displayName: 'Publish Angular build artifacts'
