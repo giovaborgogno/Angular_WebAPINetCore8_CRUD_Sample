@@ -84,10 +84,11 @@ stages:
       inputs:
         SonarCloud: 'Employee-CRUD-frontend'
         organization: 'giovaborgogno-azure-devops'
-        scannerMode: 'MSBuild'
-        projectKey: 'Employee-CRUD-frontend'
-        projectName: 'Employee-CRUD-frontend'
-        clisources: $(Build.SourcesDirectory)/EmployeeCrudAngular
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliProjectKey: 'Employee-CRUD-frontend'
+        cliProjectName: 'Employee-CRUD-frontend'
+        cliSources: $(Build.SourcesDirectory)/EmployeeCrudAngular
     - task: CmdLine@2
       displayName: 'npm install'
       inputs:
