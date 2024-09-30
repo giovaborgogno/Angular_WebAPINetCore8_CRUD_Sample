@@ -15,7 +15,7 @@ variables:
   value: false
 stages:
 - stage: Build
-  displayName: 'Test and Build Application'
+  displayName: 'Build and Test Application'
   jobs:
   - job: BuildBackend
     displayName: 'Test and Build Backend'
@@ -126,3 +126,70 @@ stages:
         artifactName: 'angular-drop'
         publishLocation: 'Container'
       displayName: 'Publish Angular build artifacts'
+- stage: DeployToQAandIntegrationsTesting
+  displayName: 'Deploy to QA and Integration Testing'
+  dependsOn:
+  - Build
+  condition: succeeded()
+  jobs:
+  - job: DeployBackendToQA
+    displayName: 'Deploy Backend to QA'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Build Artifacts'
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        targetPath: '$(Pipeline.Workspace)/drop'
+    - task: CmdLine@2
+      displayName: 'List Pipeline Workspace Content (QA)'
+      inputs:
+        script: ls -l "$(Pipeline.Workspace)/drop"
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy to Azure App Service (QA)'
+      inputs:
+        azureSubscription: 'Azure subscription 1(f0f61d84-a64b-4c90-b5eb-1afb142488f8)'
+        appType: 'webApp'
+        WebAppName: 'giovaborgogno-crud-backend-qa'
+        package: '$(Pipeline.Workspace)/drop'
+  - job: DeployFrontendToQA
+    displayName: 'Deploy Frontend to QA'
+    dependsOn:
+    - 'DeployBackendToQA'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Build Artifacts'
+      inputs:
+        buildType: 'current'
+        artifactName: 'angular-drop'
+        targetPath: '$(Pipeline.Workspace)/angular-drop'
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy to Azure App Service (QA)'
+      inputs:
+        azureSubscription: 'Azure subscription 1(f0f61d84-a64b-4c90-b5eb-1afb142488f8)'
+        appType: 'webApp'
+        WebAppName: 'giovaborgogno-crud-frontend-qa'
+        package: '$(Pipeline.Workspace)/angular-drop/employee-crud-angular/browser'
+    
+  # - job: IntegrationTesting
+  #   displayName: 'Integrations Tests'
+  #   dependsOn:
+  #   - 'DeployFrontendToQA'
+  #   steps:
+  #   - task: CmdLine@2
+  #     displayName: 'Install TypeScript'
+  #     inputs:
+  #       script: |
+  #         cd $(Build.SourcesDirectory)/EmployeeCrudAngular
+  #         npm install typescript ts-node
+  #   - task: CmdLine@2
+  #     displayName: 'Run Cypress E2E Tests'
+  #     inputs:
+  #       script: |
+  #         cd $(Build.SourcesDirectory)/EmployeeCrudAngular
+  #         npx cypress run --config-file cypress.config.ts
+  #   - task: PublishTestResults@2
+  #     inputs:
+  #       testResultsFiles: '$(Build.SourcesDirectory)/EmployeeCrudAngular/cypress/results/*.xml'
+  #       testRunTitle: 'Cypress E2E Tests (QA)'
+  #     displayName: 'Publicar resultados de Cypress'
