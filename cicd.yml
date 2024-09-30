@@ -46,8 +46,11 @@ stages:
         SonarCloud: 'SonarCloud'
         organization: 'giovaborgogno-azure-devops'
         scannerMode: 'MSBuild'
-        projectKey: 'giovaborgogno_Angular_WebAPINetCore8_CRUD_Sample'
-        projectName: 'Angular_WebAPINetCore8_CRUD_Sample'
+        projectKey: 'Employee-CRUD-backend'
+        projectName: 'Employee-CRUD-backend'
+        sources: |
+          $(Build.SourcesDirectory)/EmployeeCrudApi,
+          $(Build.SourcesDirectory)/EmployeeCrudApi.Tests
     - task: CmdLine@2
       displayName: 'Build Project'
       inputs:
@@ -77,6 +80,14 @@ stages:
       inputs:
         versionSpec: '20.x'
       displayName: 'Install Node.js'
+    - task: SonarCloudPrepare@2
+      inputs:
+        SonarCloud: 'SonarCloud'
+        organization: 'giovaborgogno-azure-devops'
+        scannerMode: 'MSBuild'
+        projectKey: 'Employee-CRUD-frontend'
+        projectName: 'Employee-CRUD-frontend'
+        sources: $(Build.SourcesDirectory)/EmployeeCrudAngular
     - task: CmdLine@2
       displayName: 'npm install'
       inputs:
@@ -118,6 +129,14 @@ stages:
         script: |
           cd $(Build.SourcesDirectory)/EmployeeCrudAngular
           ng build --configuration production
+    - task: SonarCloudAnalyze@2
+      inputs:
+        jdkversion: 'JAVA_HOME_17_X64'
+      displayName: 'Analyze SonarCloud Frontend'
+    - task: SonarCloudPublish@2
+      displayName: 'Publish SonarCloud Frontend'
+      inputs:
+        pollingTimeoutSec: '300'
     - task: PublishBuildArtifacts@1
       inputs:
         pathToPublish: '$(Build.SourcesDirectory)/EmployeeCrudAngular/dist'
