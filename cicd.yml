@@ -20,6 +20,8 @@ stages:
   - job: BuildBackend
     displayName: 'Test and Build Backend'
     steps:
+    - checkout: self
+      fetchDepth: 0
     - task: UseDotNet@2
       inputs:
         packageType: sdk
@@ -41,11 +43,24 @@ stages:
         summaryFileLocation: '$(Agent.TempDirectory)/**/*.cobertura.xml'
         failIfCoverageEmpty: false
       displayName: 'Publicar resultados de code coverage del back-end'
+    - task: SonarCloudPrepare@2
+      inputs:
+        SonarCloud: 'SonarCloud'
+        organization: 'giovaborgogno-azure-devops'
+        scannerMode: 'MSBuild'
+        projectKey: 'giovaborgogno_Angular_WebAPINetCore8_CRUD_Sample'
+        projectName: 'Angular_WebAPINetCore8_CRUD_Sample'
     - task: CmdLine@2
       displayName: 'Build Project'
       inputs:
         script: |
           dotnet build $(solution) --configuration $(buildConfiguration)
+    - task: SonarCloudAnalyze@2
+      inputs:
+        jdkversion: 'JAVA_HOME_17_X64'
+    - task: SonarCloudPublish@2
+      inputs:
+        pollingTimeoutSec: '300'
     - task: CmdLine@2
       displayName: 'Publish Project'
       inputs:
