@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="7.853" tests="1" failures="1">
+  <testsuite name="Root Suite" timestamp="2024-09-30T22:41:39" tests="0" file="cypress/e2e/unitTestBasedTest/nameMustContainAtLeast2Characters.cy.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="editEmployeeTest" timestamp="2024-09-30T22:41:39" tests="1" time="7.850" failures="1">
+    <testcase name="editEmployeeTest Muestra el mensaje de error &apos;El nombre debe tener al menos 2 caracteres.&apos; correctamente" time="0.000" classname="Muestra el mensaje de error &apos;El nombre debe tener al menos 2 caracteres.&apos; correctamente">
+      <failure message="Timed out retrying after 4000ms: expected &apos;&lt;div.ng-tns-c969959638-0.ng-star-inserted.ng-trigger.ng-trigger-flyInOut.ngx-toastr.toast-error&gt;&apos; to contain text &apos;El nombre debe tener al menos 2 caracteres.&apos;, but the text was &apos; El nombre debe tener al menos dos caracteres. &apos;" type="AssertionError"><![CDATA[AssertionError: Timed out retrying after 4000ms: expected '<div.ng-tns-c969959638-0.ng-star-inserted.ng-trigger.ng-trigger-flyInOut.ngx-toastr.toast-error>' to contain text 'El nombre debe tener al menos 2 caracteres.', but the text was ' El nombre debe tener al menos dos caracteres. '
+    at Context.eval (webpack://employee-crud-angular/./cypress/e2e/unitTestBasedTest/nameMustContainAtLeast2Characters.cy.js:9:26)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

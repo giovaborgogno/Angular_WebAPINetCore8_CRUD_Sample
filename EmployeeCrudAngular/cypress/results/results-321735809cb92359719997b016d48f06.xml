@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="3.450" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2024-09-30T22:41:20" tests="0" file="cypress/e2e/unitTestBasedTest/eachNamePartMustContainAtLeast2Characters.cy.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="editEmployeeTest" timestamp="2024-09-30T22:41:20" tests="1" time="3.447" failures="0">
+    <testcase name="editEmployeeTest Muestra el mensaje de error &apos;Cada parte del nombre debe tener al menos dos caracteres.&apos; correctamente" time="2.477" classname="Muestra el mensaje de error &apos;Cada parte del nombre debe tener al menos dos caracteres.&apos; correctamente">
+    </testcase>
+  </testsuite>
+</testsuites>

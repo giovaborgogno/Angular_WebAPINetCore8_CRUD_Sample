@@ -169,25 +169,25 @@ stages:
         WebAppName: 'giovaborgogno-crud-frontend-qa'
         package: '$(Pipeline.Workspace)/angular-drop/employee-crud-angular/browser'
     
-  # - job: IntegrationTesting
-  #   displayName: 'Integrations Tests'
-  #   dependsOn:
-  #   - 'DeployFrontendToQA'
-  #   steps:
-  #   - task: CmdLine@2
-  #     displayName: 'Install TypeScript'
-  #     inputs:
-  #       script: |
-  #         cd $(Build.SourcesDirectory)/EmployeeCrudAngular
-  #         npm install typescript ts-node
-  #   - task: CmdLine@2
-  #     displayName: 'Run Cypress E2E Tests'
-  #     inputs:
-  #       script: |
-  #         cd $(Build.SourcesDirectory)/EmployeeCrudAngular
-  #         npx cypress run --config-file cypress.config.ts
-  #   - task: PublishTestResults@2
-  #     inputs:
-  #       testResultsFiles: '$(Build.SourcesDirectory)/EmployeeCrudAngular/cypress/results/*.xml'
-  #       testRunTitle: 'Cypress E2E Tests (QA)'
-  #     displayName: 'Publicar resultados de Cypress'
+  - job: IntegrationTesting
+    displayName: 'Integrations Tests'
+    dependsOn:
+    - 'DeployFrontendToQA'
+    steps:
+    - task: CmdLine@2
+      displayName: 'Install TypeScript'
+      inputs:
+        script: |
+          cd $(Build.SourcesDirectory)/EmployeeCrudAngular
+          npm install typescript ts-node
+    - task: CmdLine@2
+      displayName: 'Run Cypress E2E Tests'
+      inputs:
+        script: |
+          cd $(Build.SourcesDirectory)/EmployeeCrudAngular
+          npx cypress run --config-file cypress.config.ts
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: '$(Build.SourcesDirectory)/EmployeeCrudAngular/cypress/results/*.xml'
+        testRunTitle: 'Cypress E2E Tests (QA)'
+      displayName: 'Publicar resultados de Cypress'

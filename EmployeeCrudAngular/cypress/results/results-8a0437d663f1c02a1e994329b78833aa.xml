@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="4.182" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2024-09-30T22:41:29" tests="0" file="cypress/e2e/unitTestBasedTest/nameCannotBeEmpty.cy.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="editEmployeeTest" timestamp="2024-09-30T22:41:29" tests="1" time="4.172" failures="0">
+    <testcase name="editEmployeeTest Muestra el mensaje de error &apos;El nombre no puede estar vacio&apos; correctamente" time="3.159" classname="Muestra el mensaje de error &apos;El nombre no puede estar vacio&apos; correctamente">
+    </testcase>
+  </testsuite>
+</testsuites>

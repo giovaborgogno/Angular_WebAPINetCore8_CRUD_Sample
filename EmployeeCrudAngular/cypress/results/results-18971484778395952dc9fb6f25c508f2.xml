@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="10.020" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2024-09-30T22:38:24" tests="0" file="cypress/e2e/editEmployee.cy.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="editEmployeeTest" timestamp="2024-09-30T22:38:24" tests="1" time="10.018" failures="0">
+    <testcase name="editEmployeeTest Edita correctamente un empleado" time="7.927" classname="Edita correctamente un empleado">
+    </testcase>
+  </testsuite>
+</testsuites>

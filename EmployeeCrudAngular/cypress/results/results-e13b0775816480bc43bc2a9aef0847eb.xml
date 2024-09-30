@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="3.676" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2024-09-30T22:41:34" tests="0" file="cypress/e2e/unitTestBasedTest/nameCannotContainNumbers.cy.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="editEmployeeTest" timestamp="2024-09-30T22:41:34" tests="1" time="3.673" failures="0">
+    <testcase name="editEmployeeTest Muestra el mensaje de error &apos;El nombre no puede contener números.&apos; correctamente" time="2.640" classname="Muestra el mensaje de error &apos;El nombre no puede contener números.&apos; correctamente">
+    </testcase>
+  </testsuite>
+</testsuites>
