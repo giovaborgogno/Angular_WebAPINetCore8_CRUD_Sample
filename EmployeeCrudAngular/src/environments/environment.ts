@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:7150/api/Employee'  // URL de la API para desarrollo
+  apiUrl: 'https://giovaborgogno-crud-backend-qa.azurewebsites.net/api/Employee'  // URL de la API para desarrollo
 };
 
 
